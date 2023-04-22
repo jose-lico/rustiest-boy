@@ -1,9 +1,11 @@
 [package]
 name = "rustiest-boy"
 version = "0.1.0"
+authors = ["José Lico"]
+description = "Yet another GameBoy emulator built in Rust"
+license = "MIT"
+repository = "https://github.com/jose-lico/rustiest-boy"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-sdl2 = "0.35"
+sdl2 = { version = "0.35", default-features = false, features = ["ttf"] }
