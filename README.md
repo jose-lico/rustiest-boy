@@ -21,7 +21,9 @@ I'm building this with the intention of learning about rust, the whole .wasm thi
 
  Run `cargo run`
 
- <p align="center">
+<p align="center">
 <img src=".github/images/rustiest-boy-linux.png">
-<i>Amazing demo window with text</i>
+</p>
+<p align="center">
+<i >Amazing demo window with text</i>
 </p>
