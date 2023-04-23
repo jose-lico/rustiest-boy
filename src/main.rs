@@ -24,6 +24,7 @@ pub fn main() -> Result<(), String> {
     let gl_attr = video_subsystem.gl_attr();
     gl_attr.set_context_profile(GLProfile::Core);
     gl_attr.set_context_version(3, 2);
+    gl_attr.set_accelerated_visual(true);
 
     let window = video_subsystem
         .window("rustiest-boy", SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -123,6 +124,8 @@ pub fn main() -> Result<(), String> {
 
         text_rect = Rect::new(0, 0, width.try_into().unwrap(), height.try_into().unwrap());
     }
+
+    println!("Context: {0}.{1}", gl_attr.context_major_version(),  gl_attr.context_minor_version());
 
     Ok(())
 }
