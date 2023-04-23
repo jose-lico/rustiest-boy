@@ -38,18 +38,18 @@ pub fn main() -> Result<(), String> {
 
     let font = ttf_context.load_font("res/PokemonGbFont.ttf", 20)?;
 
-    let text = font
+    let mut text = font
         .render("Hello World")
         .blended(Color::RGBA(255, 255, 255, 255))
         .map_err(|e| e.to_string())?;
 
-    let text_texture = texture_creator
+    let mut text_texture = texture_creator
         .create_texture_from_surface(&text)
         .map_err(|e| e.to_string())?;
 
     let TextureQuery { width, height, .. } = text_texture.query();
 
-    let text_target = Rect::new(0, 0, width.try_into().unwrap(), height.try_into().unwrap());
+    let mut text_rect = Rect::new(0, 0, width.try_into().unwrap(), height.try_into().unwrap());
 
     let background_rect = Rect::new(0, 0, 500, 200);
 
@@ -81,7 +81,7 @@ pub fn main() -> Result<(), String> {
         canvas.set_draw_color(Color::RGB(35, 35, 35));
         canvas.fill_rect(background_rect).unwrap();
 
-        canvas.copy(&text_texture, None, Some(text_target))?;
+        canvas.copy(&text_texture, None, Some(text_rect))?;
 
         canvas.present();
 
@@ -98,14 +98,30 @@ pub fn main() -> Result<(), String> {
             (emulation_end - frame_start) * 1_000_000_000 / timer_subsystem.performance_frequency();
 
         if cap_framerate && elapsed < TARGET_FRAME_TIME {
-            ::std::thread::sleep(Duration::new(0, (TARGET_FRAME_TIME - elapsed).try_into().unwrap()));
+            ::std::thread::sleep(Duration::new(
+                0,
+                (TARGET_FRAME_TIME - elapsed).try_into().unwrap(),
+            ));
         }
 
         let frame_end = timer_subsystem.performance_counter();
-        
+
         let framerate = 1_000_000_000.0 / (frame_end - frame_start) as f32;
 
-        println!("fps: {0}", framerate);
+        //println!("fps: {0}", framerate);
+
+        text = font
+            .render(format!("FPS: {:.2}", framerate).as_str())
+            .blended(Color::RGBA(255, 255, 255, 255))
+            .map_err(|e| e.to_string())?;
+
+        text_texture = texture_creator
+            .create_texture_from_surface(&text)
+            .map_err(|e| e.to_string())?;
+
+        let TextureQuery { width, height, .. } = text_texture.query();
+
+        text_rect = Rect::new(0, 0, width.try_into().unwrap(), height.try_into().unwrap());
     }
 
     Ok(())
