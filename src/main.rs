@@ -15,6 +15,24 @@ static SCREEN_HEIGHT: u32 = 650;
 
 const TARGET_FRAME_TIME: u64 = 1_000_000_000 / 60;
 
+fn find_sdl_gl_driver() -> Option<u32> {
+    for (index, item) in sdl2::render::drivers().enumerate() {
+        if item.name == "opengl" {
+            return Some(index as u32);
+        }
+    }
+    None
+}
+
+fn find_sdl_dx11_driver() -> Option<u32> {
+    for (index, item) in sdl2::render::drivers().enumerate() {
+        if item.name == "direct3d11" {
+            return Some(index as u32);
+        }
+    }
+    None
+}
+
 pub fn main() -> Result<(), String> {
     let sdl_context = sdl2::init()?;
     let ttf_context = ttf::init().map_err(|e| e.to_string())?;
@@ -23,7 +41,7 @@ pub fn main() -> Result<(), String> {
 
     let gl_attr = video_subsystem.gl_attr();
     gl_attr.set_context_profile(GLProfile::Core);
-    gl_attr.set_context_version(3, 2);
+    gl_attr.set_context_version(4, 2);
     gl_attr.set_accelerated_visual(true);
 
     let window = video_subsystem
@@ -33,7 +51,11 @@ pub fn main() -> Result<(), String> {
         .build()
         .map_err(|e| e.to_string())?;
 
-    let mut canvas = window.into_canvas().build().map_err(|e| e.to_string())?;
+    let mut canvas = window.
+        into_canvas()
+        .index(find_sdl_dx11_driver().unwrap())
+        .build()
+        .map_err(|e| e.to_string())?;
 
     let texture_creator = canvas.texture_creator();
 
