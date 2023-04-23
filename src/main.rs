@@ -17,7 +17,7 @@ const TARGET_FRAME_TIME: u64 = 1_000_000_000 / 60;
 
 fn find_sdl_gl_driver() -> Option<u32> {
     for (index, item) in sdl2::render::drivers().enumerate() {
-        if item.name == "opengl" {
+        if item.name == "opengles2" {
             return Some(index as u32);
         }
     }
@@ -39,9 +39,13 @@ pub fn main() -> Result<(), String> {
     let video_subsystem = sdl_context.video()?;
     let timer_subsystem = sdl_context.timer()?;
 
+    for (index, item) in sdl2::render::drivers().enumerate() {
+        println!("driver: {0}", item.name);
+    }
+
     let gl_attr = video_subsystem.gl_attr();
     gl_attr.set_context_profile(GLProfile::Core);
-    gl_attr.set_context_version(4, 2);
+    gl_attr.set_context_version(3, 2);
     gl_attr.set_accelerated_visual(true);
 
     let window = video_subsystem
@@ -53,7 +57,7 @@ pub fn main() -> Result<(), String> {
 
     let mut canvas = window.
         into_canvas()
-        .index(find_sdl_dx11_driver().unwrap())
+        .index(find_sdl_gl_driver().unwrap())
         .build()
         .map_err(|e| e.to_string())?;
 

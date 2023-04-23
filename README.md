@@ -19,7 +19,12 @@ I'm building this with the intention of learning about rust, the whole .wasm thi
  - Install sdl2 `sudo apt install libsdl2-dev`
  - Install sdl2-ttf `sudo apt-get install libsdl2-ttf-dev`
 
- Run `cargo run`
+ Run `cargo build`
+
+### Windows
+
+For now, Windows uses prebuilt dll's to run, so only `cargo build` is needed.
+
 
 <p align="center">
 <img src=".github/images/rustiest-boy-linux.png">
