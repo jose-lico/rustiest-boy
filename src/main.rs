@@ -55,6 +55,8 @@ pub fn main() -> Result<(), String> {
 
     let mut event_pump = sdl_context.event_pump()?;
 
+    let mut cap_framerate = true;
+
     'running: loop {
         let frame_start = timer_subsystem.performance_counter();
 
@@ -68,7 +70,7 @@ pub fn main() -> Result<(), String> {
                 Event::KeyDown {
                     keycode: Some(Keycode::V),
                     ..
-                } => println!("V pressed"),
+                } => cap_framerate = !cap_framerate,
                 _ => {}
             }
         }
@@ -95,7 +97,7 @@ pub fn main() -> Result<(), String> {
         let elapsed =
             (emulation_end - frame_start) * 1_000_000_000 / timer_subsystem.performance_frequency();
 
-        if elapsed < TARGET_FRAME_TIME {
+        if cap_framerate && elapsed < TARGET_FRAME_TIME {
             ::std::thread::sleep(Duration::new(0, (TARGET_FRAME_TIME - elapsed).try_into().unwrap()));
         }
 
