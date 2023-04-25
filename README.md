@@ -24,11 +24,3 @@ I'm building this with the intention of learning about rust, the whole .wasm thi
 ### Windows
 
 For now, Windows uses prebuilt dll's to run, so only `cargo build` is needed.
-
-
-<p align="center">
-<img src=".github/images/rustiest-boy-linux.png">
-</p>
-<p align="center">
-<i >Amazing demo window with text</i>
-</p>
