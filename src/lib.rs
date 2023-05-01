@@ -3,12 +3,12 @@ use winit::{
     event_loop::{ControlFlow, EventLoop},
 };
 
-mod utils;
-
-use utils::window::MyWindow;
-
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
+
+mod utils;
+
+use utils::window::Window;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen(start))]
 pub fn run() {
@@ -23,27 +23,13 @@ pub fn run() {
 
     let event_loop = EventLoop::new();
 
-    let my_window = MyWindow::new(500, 450, &event_loop);
-
-    #[cfg(target_arch = "wasm32")]
-    {
-        use winit::platform::web::WindowExtWebSys;
-        web_sys::window()
-            .and_then(|win| win.document())
-            .and_then(|doc| {
-                let dst = doc.get_element_by_id("wasm-example")?;
-                let canvas = web_sys::Element::from(my_window.window.canvas());
-                dst.append_child(&canvas).ok()?;
-                Some(())
-            })
-            .expect("Couldn't append canvas to document body.");
-    }
+    let window = Window::new(500, 450, &event_loop);
 
     event_loop.run(move |event, _, control_flow| match event {
         Event::WindowEvent {
             ref event,
             window_id,
-        } if window_id == my_window.id => match event {
+        } if window_id == window.handle.id() => match event {
             WindowEvent::CloseRequested
             | WindowEvent::KeyboardInput {
                 input:
