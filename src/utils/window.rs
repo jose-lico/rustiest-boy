@@ -1,35 +1,30 @@
 use winit::{
     dpi::LogicalSize,
-    event::*,
-    event_loop::{ControlFlow, EventLoop},
+    event_loop::{EventLoop},
     window::{Window, WindowBuilder, WindowId},
 };
 
 pub struct MyWindow {
     pub id: WindowId,
-    win: Window,
-    width: u16,
-    height: u16,
+    pub window: Window,
 }
 
 impl MyWindow {
-    pub fn new(w: u16, h: u16, event_loop: &EventLoop<()>) -> Self {
+    pub fn new(width: u16, height: u16, event_loop: &EventLoop<()>) -> Self {
         println!("Creating window!");
 
         let window = WindowBuilder::new()
             .with_title("rustiest-boy")
-            .with_inner_size(LogicalSize::new(w, h))
+            .with_inner_size(LogicalSize::new(width, height))
             .with_resizable(false)
             .build(&event_loop)
             .unwrap();
 
-        let i = window.id();
+        let id = window.id();
 
         MyWindow {
-            width: w,
-            height: h,
-            win: window,
-            id: i,
+            window,
+            id,
         }
     }
 }

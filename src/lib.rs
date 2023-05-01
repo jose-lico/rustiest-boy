@@ -32,7 +32,7 @@ pub fn run() {
             .and_then(|win| win.document())
             .and_then(|doc| {
                 let dst = doc.get_element_by_id("wasm-example")?;
-                let canvas = web_sys::Element::from(window.canvas());
+                let canvas = web_sys::Element::from(my_window.window.canvas());
                 dst.append_child(&canvas).ok()?;
                 Some(())
             })
