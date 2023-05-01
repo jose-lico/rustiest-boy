@@ -1,9 +1,11 @@
 use winit::{
-    dpi::LogicalSize,
     event::*,
     event_loop::{ControlFlow, EventLoop},
-    window::WindowBuilder,
 };
+
+mod utils;
+
+use utils::window::MyWindow;
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
@@ -20,12 +22,8 @@ pub fn run() {
     }
 
     let event_loop = EventLoop::new();
-    let window = WindowBuilder::new()
-        .with_title("rustiest-boy")
-        .with_inner_size(LogicalSize::new(500, 450))
-        .with_resizable(false)
-        .build(&event_loop)
-        .unwrap();
+
+    let my_window = MyWindow::new(500, 450, &event_loop);
 
     #[cfg(target_arch = "wasm32")]
     {
@@ -45,7 +43,7 @@ pub fn run() {
         Event::WindowEvent {
             ref event,
             window_id,
-        } if window_id == window.id() => match event {
+        } if window_id == my_window.id => match event {
             WindowEvent::CloseRequested
             | WindowEvent::KeyboardInput {
                 input:
